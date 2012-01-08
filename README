@@ -1,0 +1,8 @@
+
+Simple C++ App to read the XML documents from SMSReader Backup application for Android.
+
+Uses shared_ptr
+Uses wxWidgets
+Uses TinyXML
+Uses std::vector
+Uses find algorithm
