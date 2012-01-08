@@ -32,19 +32,19 @@ MainFrameBase::MainFrameBase( wxWindow* parent, wxWindowID id, const wxString& t
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(mainSizer);
 
-    wxBoxSizer* filterSizer = new wxBoxSizer(wxHORIZONTAL);
-    mainSizer->Add(filterSizer, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
+	wxBoxSizer* filterSizer = new wxBoxSizer(wxHORIZONTAL);
+	mainSizer->Add(filterSizer, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    wxStaticText* lblFilter = new wxStaticText( this, wxID_STATIC, _("Filter Sender: "), wxDefaultPosition, wxDefaultSize, 0 );
-    filterSizer->Add(lblFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	wxStaticText* lblFilter = new wxStaticText( this, wxID_STATIC, _("Filter Sender: "), wxDefaultPosition, wxDefaultSize, 0 );
+	filterSizer->Add(lblFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 	wxArrayString filterList;
-    cboFilter = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, filterList, 0 );
-    filterSizer->Add(cboFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	cboFilter = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, filterList, 0 );
+	filterSizer->Add(cboFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxArrayString messageList;
-    lstMessages = new wxSimpleHtmlListBox( this, wxID_ANY, wxDefaultPosition, wxSize(400, 300), messageList, wxHLB_DEFAULT_STYLE );
-    mainSizer->Add(lstMessages, 1, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+	wxArrayString messageList;
+	lstMessages = new wxSimpleHtmlListBox( this, wxID_ANY, wxDefaultPosition, wxSize(400, 300), messageList, wxHLB_DEFAULT_STYLE );
+	mainSizer->Add(lstMessages, 1, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 	
 	lstMessages->SetBackgroundColour(this->GetBackgroundColour());
 	AddSMSMessage(SMSMessage(wxT(""),wxT(""),wxT("")));
