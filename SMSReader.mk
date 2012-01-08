@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=phill
-Date                   :=04/01/12
+Date                   :=08/01/12
 CodeLitePath           :="/home/phill/.codelite"
 LinkerName             :=g++
 ArchiveTool            :=ar rcus
@@ -48,7 +48,7 @@ LibPath                := "$(LibraryPathSwitch)."
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects=$(IntermediateDirectory)/gui$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/gui_message_item$(ObjectSuffix) $(IntermediateDirectory)/sms_message$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/gui$(ObjectSuffix) $(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/sms_message$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -84,14 +84,6 @@ $(IntermediateDirectory)/main$(DependSuffix): main.cpp
 $(IntermediateDirectory)/main$(PreprocessSuffix): main.cpp
 	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main$(PreprocessSuffix) "/home/phill/.codelite/SMSReader/main.cpp"
 
-$(IntermediateDirectory)/gui_message_item$(ObjectSuffix): gui_message_item.cpp $(IntermediateDirectory)/gui_message_item$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/phill/.codelite/SMSReader/gui_message_item.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/gui_message_item$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/gui_message_item$(DependSuffix): gui_message_item.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/gui_message_item$(ObjectSuffix) -MF$(IntermediateDirectory)/gui_message_item$(DependSuffix) -MM "/home/phill/.codelite/SMSReader/gui_message_item.cpp"
-
-$(IntermediateDirectory)/gui_message_item$(PreprocessSuffix): gui_message_item.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/gui_message_item$(PreprocessSuffix) "/home/phill/.codelite/SMSReader/gui_message_item.cpp"
-
 $(IntermediateDirectory)/sms_message$(ObjectSuffix): sms_message.cpp $(IntermediateDirectory)/sms_message$(DependSuffix)
 	$(CompilerName) $(SourceSwitch) "/home/phill/.codelite/SMSReader/sms_message.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/sms_message$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/sms_message$(DependSuffix): sms_message.cpp
@@ -112,9 +104,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/main$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/main$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/main$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/gui_message_item$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/gui_message_item$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/gui_message_item$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/sms_message$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/sms_message$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/sms_message$(PreprocessSuffix)

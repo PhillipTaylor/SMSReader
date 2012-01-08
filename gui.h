@@ -9,7 +9,7 @@
 #define __gui__
 
 #include <wx/wx.h>
-#include "gui_message_item.h"
+#include <wx/htmllbox.h>
 #include "sms_message.h"
 
 /*
@@ -49,16 +49,16 @@ class MainFrameBase : public wxFrame
 		wxMenuBar* m_menuBar;
 		wxMenu* m_menuFile;
 		wxStatusBar* m_statusBar;
-		wxComboBox* m_filter;
-		wxScrolledWindow* m_scrWin;
-		wxBoxSizer* m_listSizer;
-		
+		wxSimpleHtmlListBox* lstMessages;
+		wxChoice* cboFilter;
+				
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseFrame( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnExitClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFileOpen( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnChangeFilter( wxCommandEvent& event) { event.Skip(); }
 		virtual void ClearAll();
-		virtual void AddSMSMessagePanel(const SMSMessage& message);
+		virtual void AddSMSMessage(const SMSMessage& message);
 			
 	public:
 		

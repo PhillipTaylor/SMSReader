@@ -12,6 +12,7 @@
 MainFrameBase::MainFrameBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetTitle(wxT("Phills SMS Reader"));
 	
 	//Menu Bar stuff.
 	m_menuBar = new wxMenuBar( 0 );
@@ -27,60 +28,26 @@ MainFrameBase::MainFrameBase( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuBar->Append( m_menuFile, _("&File") );
 	
 	this->SetMenuBar( m_menuBar );
+	
+	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    this->SetSizer(mainSizer);
 
-	//main sizer for whole interface
-	wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* filterSizer = new wxBoxSizer(wxHORIZONTAL);
+    mainSizer->Add(filterSizer, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-	this->SetSizer( mainSizer );
-	
-	// Filter box section
-	wxStaticText* filterLabel = new wxStaticText(this, wxID_ANY, wxT("Filter by Sender:"));
-	
-	m_filter = new wxComboBox(
-		this,
-		wxID_ANY,
-		wxT(""),
-		wxDefaultPosition,
-		wxDefaultSize,
-		0,
-		NULL,
-		wxCB_DROPDOWN|wxCB_READONLY
-	);
-	
-	wxBoxSizer* filterSizer = new wxBoxSizer( wxHORIZONTAL );
-	filterSizer->Add(filterLabel);
-	filterSizer->Add(m_filter);
-	mainSizer->Add(filterSizer);
-	
-	// List of Messages section
-	m_scrWin = new wxScrolledWindow(
-		this,
-		wxID_ANY
-	);
-			
-	m_listSizer = new wxBoxSizer(wxVERTICAL);
-	m_scrWin->SetSizer(m_listSizer);
-	mainSizer->Add(m_scrWin, wxEXPAND);
-	
-	//example msg
-	SMSMessage* exampleMessage = new SMSMessage(
-		wxT("+44 07950 322 789"),
-		wxT("2011-13-07 13:22"),
-		wxT("Yo mate, what's up?")
-	);
+    wxStaticText* lblFilter = new wxStaticText( this, wxID_STATIC, _("Filter Sender: "), wxDefaultPosition, wxDefaultSize, 0 );
+    filterSizer->Add(lblFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-	for (int i = 0; i < 6; i++) {
-		AddSMSMessagePanel(*exampleMessage);
-	}
+	wxArrayString filterList;
+    cboFilter = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, filterList, 0 );
+    filterSizer->Add(cboFilter, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxArrayString messageList;
+    lstMessages = new wxSimpleHtmlListBox( this, wxID_ANY, wxDefaultPosition, wxSize(400, 300), messageList, wxHLB_DEFAULT_STYLE );
+    mainSizer->Add(lstMessages, 1, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 	
-	//wxSize minimum(300,500);
-	
-	m_scrWin->FitInside();
-	//m_scrWin->SetMinSize(minimum);
-	//m_listSizer->SetMinSize(minimum);
-	//m_scrWin->EnableScrolling(true, true);
-	//m_scrWin->SetScrollRate(1,1);
-	m_scrWin->SetScrollRate(5, 5);
+	lstMessages->SetBackgroundColour(this->GetBackgroundColour());
+	AddSMSMessage(SMSMessage(wxT(""),wxT(""),wxT("")));
 
 	this->Layout();
 	m_statusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
@@ -91,6 +58,7 @@ MainFrameBase::MainFrameBase( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrameBase::OnCloseFrame ) );
 	this->Connect( menuFileOpen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameBase::OnFileOpen ) );
 	this->Connect( menuFileExit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameBase::OnExitClick ) );
+	this->Connect( cboFilter->GetId(), wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( MainFrameBase::OnChangeFilter ) );
 }
 
 MainFrameBase::~MainFrameBase()
@@ -101,10 +69,24 @@ MainFrameBase::~MainFrameBase()
 }
 
 void MainFrameBase::ClearAll() {
-	m_listSizer->Clear(true);
+	lstMessages->Clear();
 }
 
-void MainFrameBase::AddSMSMessagePanel(const SMSMessage& message) {
-	GUIMessageItem* gmi = new GUIMessageItem(m_scrWin, wxID_ANY, message); //object inherits from wxPanel
-	m_listSizer->Add(gmi);
+void MainFrameBase::AddSMSMessage(const SMSMessage& message) {
+		
+	wxString t;
+	wxString open1 = wxString(wxT("<div align=\"left\" color=\"#ff00aa\">"));
+	wxString open2 = wxString(wxT("</div><div align=\"right\" color=\"#ffbbcc\""));
+	wxString open3 = wxString(wxT("</div><br><div>"));
+	wxString open4 = wxString(wxT("</div>"));
+	
+	t = open1;
+	t += message.GetSender();
+	t += open2;
+	t += message.GetSentTime();
+	t += open3;
+	t += message.GetMessage();
+	t += open4;
+	
+	lstMessages->Insert(t, lstMessages->GetCount());
 }

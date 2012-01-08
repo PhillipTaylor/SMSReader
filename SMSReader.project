@@ -10,13 +10,11 @@
   <VirtualDirectory Name="src">
     <File Name="gui.cpp"/>
     <File Name="main.cpp"/>
-    <File Name="gui_message_item.cpp"/>
     <File Name="sms_message.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="gui.h"/>
     <File Name="main.h"/>
-    <File Name="gui_message_item.h"/>
     <File Name="sms_message.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="resources">

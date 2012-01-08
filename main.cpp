@@ -75,11 +75,10 @@ void MainFrame::OnFileOpen(wxCommandEvent& event)
 
 void MainFrame::LoadFile(const wxString& filename) {
 	
-	const char *d = filename.mb_str();
-	TiXmlDocument doc("/home/phill/30-12-2011-093329.xml");
+	const string& fn = string(filename.mb_str());
+	TiXmlDocument doc(fn);
 	
 	if (doc.LoadFile()) {
-		//m_statusBar->SetStatusText(wxT("Loading: ") + filename);
 		
 		TiXmlHandle hDoc(&doc);
 		TiXmlElement* pElem;
@@ -90,15 +89,9 @@ void MainFrame::LoadFile(const wxString& filename) {
 			m_statusBar->SetStatusText(wxT("No root node"));
 			return;
 		}
-		
-		//wxString s(pElem->Value(), wxConvUTF8);
-		/*for (TiXmlAttribute* rootAttr = pRootNode->FirstAttribute(); rootAttr != NULL, rootAttr->Next()) {
-			
-			if (rootAttr->Name() == "count")
-			
-		} */
-		
+	
 		allMessages.clear();
+		vector<wxString> uniqueList;
 		
 		for (pElem = pRootNode->FirstChildElement(); pElem != NULL; pElem = pElem->NextSiblingElement()) {
 			
@@ -112,9 +105,16 @@ void MainFrame::LoadFile(const wxString& filename) {
 			
 			shared_ptr<SMSMessage> msg(new SMSMessage(wxsAddr, wxsSentTime, wxsMessageBody));
 			allMessages.push_back(msg);
-		}
+			
+			const wxString& t = msg->GetSender();
 		
-		m_filter->Clear();
+			if (find(uniqueList.begin(), uniqueList.end(), t) == uniqueList.end()) {
+				cboFilter->Insert(t, cboFilter->GetCount());
+				uniqueList.push_back(t);
+			}
+			
+		}
+
 		UpdateFilters();
 		
 	} else {
@@ -127,7 +127,18 @@ void MainFrame::UpdateFilters() {
 	
 	ClearAll();
 	
+	int selected = cboFilter->GetSelection();
+	
 	for (vector<shared_ptr<SMSMessage> >::const_iterator msg = allMessages.begin(); msg != allMessages.end(); msg++) {
-		AddSMSMessagePanel(**msg);
+
+		if (selected == -1 || allMessages[selected]->GetSender() == (*msg)->GetSender()) {
+			AddSMSMessage(**msg);
+		}
+
 	}
+	
+}
+
+void MainFrame::OnChangeFilter(wxCommandEvent& event) {
+	UpdateFilters();
 }
